@@ -8,15 +8,15 @@
   <compiler>
     <define append="true">
       <name>CONFIG::debug</name>
-      <value>false</value>
-    </define>
-    <define append="true">
-      <name>CONFIG::release</name>
       <value>true</value>
     </define>
     <define append="true">
+      <name>CONFIG::release</name>
+      <value>false</value>
+    </define>
+    <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'15/06/2015'</value>
+      <value>'2018-12-02'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -30,18 +30,16 @@
       <name>CONFIG::desktop</name>
       <value>false</value>
     </define>
-    <optimize>true</optimize>
-    <omit-trace-statements>true</omit-trace-statements>
-    <verbose-stacktraces>false</verbose-stacktraces>
+    <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>E:\Allans Programming\Games Indev\MeowMeowMeowTheGame\src</path-element>
-      <path-element>E:\Allans Programming\Games Indev\MeowMeowMeowTheGame\libs\engine</path-element>
-      <path-element>E:\Allans Programming\Games Indev\MeowMeowMeowTheGame\libs\org</path-element>
+      <path-element>C:\Users\Allan\Documents\Games Indev\MeowMeowMeowTheGame\src</path-element>
+      <path-element>C:\Users\Allan\Documents\Games Indev\MeowMeowMeowTheGame\libs\engine</path-element>
+      <path-element>C:\Users\Allan\Documents\Games Indev\MeowMeowMeowTheGame\libs\org</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
   </compiler>
   <file-specs>
-    <path-element>E:\Allans Programming\Games Indev\MeowMeowMeowTheGame\src\Main.as</path-element>
+    <path-element>C:\Users\Allan\Documents\Games Indev\MeowMeowMeowTheGame\src\Main.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>

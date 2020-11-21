@@ -6,13 +6,7 @@ package
 	 * 13/6/14
 	 * Level 1
 	 */
-	import flash.accessibility.Accessibility;
 	import org.flixel.*; //Get access to all the wonders flixel has to offer
-	import org.flixel.plugin.photonstorm.FlxWeapon;
-	import org.flixel.plugin.photonstorm.FlxControl;
-	import org.flixel.plugin.photonstorm.FlxControlHandler;
-	import flash.display.BlendMode;
-	
 	
 	public class level1 extends FlxState {
 		/********************
@@ -60,6 +54,9 @@ package
 		private var rain:FlxGroup;
 		private var blockers:FlxGroup;
 		
+		// Debug text
+		private var debugText:FlxText;
+		
 		/**********
 		 * Sounds
 		 *********/
@@ -86,11 +83,11 @@ package
 		private var lives:Number;
 		private var score:Number;
 		private var thunderTimer:Number;
-		private var _jump:Number;
+		private var _jump:Number = 0;
 		private var isSlashing:Boolean = false;
 		private var speed:Number;
 		private var i:Number = 0;
-		private var isJumping:Boolean = false;
+		private var isJumping:Boolean = true;
 		private var slashTime:Number = 0;
 		
 		private var emitter:FlxEmitter;
@@ -206,7 +203,7 @@ package
 			cat_.addAnimation("catWalking", [0, 1, 2, 3], 10, true);
 			cat_.addAnimation("catJumping", [0, 0, 0, 0], 10, true);
 			cat_.play("catWalking");
-			cat_.acceleration.y = 120;
+			cat_.acceleration.y = 2000;
 			this.add(cat_);
 			
 			slash_ = new FlxSprite(0, 0, null);
@@ -252,6 +249,10 @@ package
 			
 			add(emitter);
 			emitter.start( false, 2, 0.0025, 0);
+			
+			// Text
+			debugText = new FlxText( 0, 0, 40, "swag");
+			add(debugText);
 		}
 		
 		/***********
@@ -327,6 +328,9 @@ package
 		 * Update Game
 		 **************/
 		override public function update():void {
+			// Debug the timer
+			debugText.text = String(cat_.velocity.y);
+			
 			// Always call this at the start of the function
 			super.update();
 			
@@ -370,50 +374,33 @@ package
 			 * Jumping
 			 ***********/
 			// Time jumping for
-			if ((_jump >= 0) && ((FlxG.keys.UP) || FlxG.mouse.pressed())) {
-                _jump += FlxG.elapsed;
-                if (_jump > 0.5) {
-					//You can't jump for more than 0.5 second
-					_jump = -1; 
-				}
-            }
-            else {
-				_jump = -1;
-			}
- 
-			// Jump physics
-            if (_jump > 0) {
-                if (_jump < 0.065) {
-				    //This is the minimum speed of the jump
-                    cat_.velocity.y = -300;
-					if( !isJumping){
-						isJumping = true;
-						cat_.play("catJumping");
+			if ( !isJumping || _jump > 0) {
+				if(FlxG.keys.UP || FlxG.mouse.pressed()) {
+					if (_jump >= 0.5) {
+						//You can't jump for more than 0.5 second
+						_jump = 0; 
+					}
+					else {
+						_jump += FlxG.elapsed;
+						cat_.y -= 1;
+						cat_.velocity.y = -350;
 					}
 				}
-                else {
-					//The general acceleration of the jump
-                    cat_.acceleration.y = 50; 
+				else {
+					_jump = 0;
 				}
             }
-			else {
-                cat_.velocity.y = 500;
-            }
-			
-			// Reset position
-			cat_.x = 64;
 			
 			/***********
 			 * Collide
 			 **********/
 			if ( FlxG.collide(cat_, barriers)) {
-				_jump = 0;
-				if ( isJumping) {
-					cat_.play("catWalking");
-				}
+				cat_.play("catWalking");
 				isJumping = false;
-				cat_.velocity.y = 0;
-				cat_.acceleration.y = 0; 
+			}
+			else {
+				isJumping = true;
+				cat_.play("catJumping");
 			}
 			
 			// Garbage with barriers
@@ -427,9 +414,9 @@ package
 						score += 5;
 					}
 					
-					//blockers.remove(blockers.members[i]);
-					blockers.members[i].acceleration.y = -1000;
-					blockers.members[i].velocity.y = -1000;
+					blockers.remove(blockers.members[i]);
+					remove(blockers.members[i]);
+					
 				}
 			}
 			
@@ -444,6 +431,7 @@ package
 				cat_.x = 64;
 				FlxG.play(meowSound, 1, false);
 				lives -= 1;
+				isJumping = true;
 				
 				numberLives.text = "Lives:" + intToString(lives);
 				
